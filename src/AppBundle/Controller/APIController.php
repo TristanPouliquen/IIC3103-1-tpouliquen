@@ -17,12 +17,13 @@ class APIController extends Controller
     public function indexAction(Request $request, $message, $hash)
     {
         if (empty($message) or empty($hash)) {
-            return new JsonResponse('One or more arguments are missing in the request', 400);
+            return new Response('One or more arguments are missing in the request', 400);
         }
+
         try {
-            $untouched_message = (bool) ($hash === hash("sha256", $message))
+            $untouched_message = (bool) ($hash === hash("sha256", $message));
         } catch(\Exception $e) {
-            return new JsonResponse('An error happened. Check the validity of your parameters and try resubmit your request', 500);
+            return new Response('An error happened. Check the validity of your parameters and try resubmit your request', 500);
         }
 
         $array = ['original_message' => $message, 'untouched_message' => $untouched_message];
@@ -39,5 +40,22 @@ class APIController extends Controller
         return new Response($status = 201);
     }
 
-    
+    /**
+     * @Route("/texto")
+     * @Method("GET")
+     */
+    public function textAction(Request $request)
+    {
+        $text = file_get_contents("https://s3.amazonaws.com/files.principal/texto.txt");
+
+        try {
+            $hash = hash("sha256", $text);
+        } catch(\Exception $e) {
+            return new Response('An error happened. Try to resubmit your request later', 500);
+        }
+
+        $array = [$text, $hash];
+
+        return new JsonResponse($array);
+    }
 }
