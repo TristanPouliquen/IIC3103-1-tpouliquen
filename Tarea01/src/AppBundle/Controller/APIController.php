@@ -17,7 +17,7 @@ class APIController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $message = $request->query->get('message');
+        $message = $request->query->get('mensaje');
         $hash = $request->query->get('hash');
 
         if (empty($message) or empty($hash)) {
