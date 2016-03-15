@@ -41,7 +41,7 @@ class APIController extends Controller
      */
     public function statusAction(Request $request)
     {
-        return new Response([],201);
+        return new Response("",201);
     }
 
     /**
