@@ -15,14 +15,17 @@ class APIController extends Controller
      * @Route("/validarFirma")
      * @Method("POST")
      */
-    public function indexAction(Request $request, $message, $hash)
+    public function indexAction(Request $request)
     {
+        $message = $request->query->get('message');
+        $hash = $request->query->get('hash');
+
         if (empty($message) or empty($hash)) {
             return new Response('One or more arguments are missing in the request', 400);
         }
 
         try {
-            $untouched_message = (bool) ($hash === hash("sha256", $message));
+            $untouched_message = (bool) ($hash === strtoupper(hash("sha256", $message)));
         } catch(\Exception $e) {
             return new Response('An error happened. Check the validity of your parameters and try resubmit your request', 500);
         }
@@ -50,12 +53,12 @@ class APIController extends Controller
         $text = file_get_contents("https://s3.amazonaws.com/files.principal/texto.txt");
 
         try {
-            $hash = hash("sha256", $text);
+            $hash = strtoupper(hash("sha256", $text));
         } catch(\Exception $e) {
             return new Response('An error happened. Try to resubmit your request later', 500);
         }
 
-        $array = [$text, $hash];
+        $array = ['original_text' => $text, 'hash' => $hash];
 
         return new JsonResponse($array);
     }
