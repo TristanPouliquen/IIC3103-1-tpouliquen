@@ -30,7 +30,7 @@ class APIController extends Controller
             return new Response('An error happened. Check the validity of your parameters and try resubmit your request', 500);
         }
 
-        $array = ['original_message' => $message, 'untouched_message' => $untouched_message];
+        $array = ['mensaje' => $message, 'valido' => $untouched_message];
 
         return new JsonResponse($array);
     }
@@ -58,7 +58,7 @@ class APIController extends Controller
             return new Response('An error happened. Try to resubmit your request later', 500);
         }
 
-        $array = ['original_text' => $text, 'hash' => $hash];
+        $array = ['text' => $text, 'hash' => $hash];
 
         return new JsonResponse($array);
     }
