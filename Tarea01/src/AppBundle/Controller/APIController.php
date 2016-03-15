@@ -17,8 +17,8 @@ class APIController extends Controller
      */
     public function indexAction(Request $request)
     {
-        $message = $request->query->get('mensaje');
-        $hash = $request->query->get('hash');
+        $message = $request->request->get('mensaje');
+        $hash = $request->request->get('hash');
 
         if (empty($message) or empty($hash)) {
             return new Response('One or more arguments are missing in the request', 400);
